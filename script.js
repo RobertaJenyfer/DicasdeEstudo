@@ -1,63 +1,41 @@
 const palavrasHome = ['Mapa Mental', 'Organização Visual', 'Ideias', 'Criatividade'];
-let exibirHome = document.getElementById('mostrarHome');
-let inputHome = document.getElementById('textoHome');
-
-function atualizarHome() {
-    const termoPesquisa = inputHome.value.toLowerCase();
-    
-    if (termoPesquisa === '') {
-        exibirHome.innerHTML = '';
-        return;
-    }
-
-    const palavrasFiltradas = palavrasHome.filter(palavra => palavra.toLowerCase().includes(termoPesquisa));
-    exibirPalavras(palavrasFiltradas, exibirHome);
-}
-
-exibirPalavras(palavrasHome, exibirHome);
-
 const palavrasMetodos = ['Pomodoro', 'Técnica de Estudo', 'Temporizador', 'Foco', 'Método Pomodoro', 'Mapa Mental', 'Resumos', 'Testes Práticos', 'Autoexplicação', 'Método Feynman', 'Método Blurting'];
-let exibirMetodos = document.getElementById('mostrarMetodos');
-let inputMetodos = document.getElementById('textoMetodos');
-
-function atualizarMetodos() {
-    const termoPesquisa = inputMetodos.value.toLowerCase();
-    
-    if (termoPesquisa === '') {
-        exibirMetodos.innerHTML = '';
-        return;
-    }
-
-    const palavrasFiltradas = palavrasMetodos.filter(palavra => palavra.toLowerCase().includes(termoPesquisa));
-    exibirPalavras(palavrasFiltradas, exibirMetodos);
-}
-
-exibirPalavras(palavrasMetodos, exibirMetodos);
-
 const palavrasDicas = ['Resumos', 'Eficácia', 'Informações Complexas', 'Revisão', 'Simplificação'];
-let exibirDicas = document.getElementById('mostrarDicas');
-let inputDicas = document.getElementById('textoDicas');
 
-function atualizaraaDicas() {
-    const termoPesquisa = inputDicas.value.toLowerCase();
-    
-    if (termoPesquisa === '') {
-        exibirDicas.innerHTML = '';
-        return;
+    function atualizar(idTexto, idMostrar) {
+        const termoPesquisa = document.getElementById(idTexto).value.toLowerCase();
+        const palavrasFiltradas = obterPalavras(idMostrar).filter(palavra => palavra.toLowerCase().includes(termoPesquisa));
+        exibirPalavras(palavrasFiltradas, idMostrar);
     }
 
-    const palavrasFiltradas = palavrasDicas.filter(palavra => palavra.toLowerCase().includes(termoPesquisa));
-    exibirPalavras(palavrasFiltradas, exibirPagina3);
-}
+    function buscar(idTexto) {
+        atualizar(idTexto, `mostrar${idTexto.charAt(5).toUpperCase()}${idTexto.slice(6)}`);
+    }
 
-exibirPalavras(palavrasDicas, exibirDicas);
+    function exibirPalavras(palavrasFiltradas, idExibir) {
+        const elemento = document.getElementById(idExibir);
+        elemento.innerHTML = '';
 
-function exibirPalavras(palavrasFiltradas, elementoExibir) {
-    elementoExibir.innerHTML = '';
+        palavrasFiltradas.forEach(palavra => {
+            let p = document.createElement('p');
+            p.innerHTML = realcarPalavras(palavra, termoPesquisa);
+            elemento.appendChild(p);
+        });
+    }
 
-    palavrasFiltradas.forEach(palavra => {
-        let p = document.createElement('p');
-        p.innerHTML = palavra;
-        elementoExibir.appendChild(p);
-    });
-}
+    function realcarPalavras(palavra, termoPesquisa) {
+        return palavra.replace(new RegExp(`(${termoPesquisa})`, 'ig'), '<span class="destaque">$1</span>');
+    }
+
+    function obterPalavras(idMostrar) {
+        switch (idMostrar) {
+            case 'mostrarHome':
+                return palavrasHome;
+            case 'mostrarMetodos':
+                return palavrasMetodos;
+            case 'mostrarDicas':
+                return palavrasDicas;
+            default:
+                return [];
+        }
+    }
